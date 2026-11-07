@@ -1,8 +1,7 @@
 {
   "nom_site": "linguine",
   "surtitre": "Sciences du langage · carnet personnel",
-  "accroche": "Les mots ont des passeports.",
-  "presentation": "[Deux ou trois phrases sur toi : ta reprise d'études, ce qui t'attire dans les sciences du langage, ce que tu viens ranger ici.]",
+  "accroche": "Mots itinérants",
   "mot_du_moment": "café",
   "intro_mots": "L'histoire des mots que le français a empruntés ailleurs : d'où ils viennent, par quelles langues ils sont passés, et ce qu'ils ont changé en route.",
   "intro_lectures": "Des notes prises sur le vif, pas des critiques. Ce que je retiens, ce que je ne comprends pas encore, les mots que j'ai envie de suivre.",
@@ -10,9 +9,18 @@
   "apropos": "[Quelques lignes sur toi et sur ce projet : pourquoi ce carnet, ce que tu étudies, ce que tu aimerais y explorer.]\n\nCe site est un projet personnel, sans objectif d'audience. J'y écris au rythme de mes études et de mes curiosités.",
   "nom_explication": "En italien, *linguine* veut dire « petites langues » : c'est le pluriel de *linguina*, diminutif de *lingua*. Des pâtes, donc, et un nom qui parle déjà d'emprunt.",
   "pile": [
-    { "titre": "Cours de linguistique générale", "auteur": "Ferdinand de Saussure" },
-    { "titre": "L'aventure des mots venus d'ailleurs", "auteur": "Henriette Walter" },
-    { "titre": "La guerre des langues", "auteur": "Louis-Jean Calvet" }
+    {
+      "titre": "Cours de linguistique générale",
+      "auteur": "Ferdinand de Saussure"
+    },
+    {
+      "titre": "L'aventure des mots venus d'ailleurs",
+      "auteur": "Henriette Walter"
+    },
+    {
+      "titre": "La guerre des langues",
+      "auteur": "Louis-Jean Calvet"
+    }
   ],
   "pied_de_page": "Un carnet personnel de sciences du langage."
 }
