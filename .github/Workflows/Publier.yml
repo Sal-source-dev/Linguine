@@ -1,0 +1,71 @@
+name: Publier le site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer un fichier .zip déposé dans le dépôt
+        run: |
+          shopt -s nullglob
+          zips=( *.zip )
+          if [ ${#zips[@]} -gt 0 ]; then
+            for z in "${zips[@]}"; do
+              unzip -o -q "$z" -x '.github/*'
+              rm -f "$z"
+            done
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Installation du fichier zip" || true
+            git push
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Construire le site
+        run: |
+          mkdir -p _site
+          if [ ! -f package.json ]; then
+            echo '<!doctype html><meta charset="utf-8"><title>linguine</title><p>Installation en cours : dépose linguine.zip dans le dépôt.</p>' > _site/index.html
+            exit 0
+          fi
+          npm ci --no-audit --no-fund
+          nom="${{ github.event.repository.name }}"
+          case "$nom" in
+            *.github.io) prefixe="/" ;;
+            *) prefixe="/$nom/" ;;
+          esac
+          npx @11ty/eleventy --pathprefix="$prefixe"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4
