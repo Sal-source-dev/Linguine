@@ -1,0 +1,16 @@
+---
+layout: layouts/base.njk
+permalink: /articles/
+section: articles
+titre_page: Articles
+---
+{%- set articles = collections.articles | parDate -%}
+<div class="conteneur">
+  <h1 class="page-titre">Articles</h1>
+  <div class="chapo">{{ reglages.intro_articles | md | safe }}</div>
+  <div style="margin-top:48px">
+    {% if articles.length %}
+    <div class="grille">{% for a in articles %}{% include "carte-article.njk" %}{% endfor %}</div>
+    {% else %}<p class="vide">Aucun article pour l'instant.</p>{% endif %}
+  </div>
+</div>

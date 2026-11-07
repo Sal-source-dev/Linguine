@@ -1,0 +1,27 @@
+---
+layout: layouts/base.njk
+permalink: /mots/
+section: mots
+titre_page: Mots voyageurs
+---
+{%- set liste = collections.mots | parMot -%}
+<div class="conteneur">
+  <h1 class="page-titre">Mots voyageurs</h1>
+  <div class="chapo">{{ reglages.intro_mots | md | safe }}</div>
+  <div class="filtres" role="group" aria-label="Filtrer par langue source">
+    <button type="button" data-langue="toutes" aria-pressed="true">Toutes<span class="nb">{{ liste.length }}</span></button>
+    {% for l in collections.mots | langues %}<button type="button" data-langue="{{ l.nom }}" aria-pressed="false">{{ l.nom }}<span class="nb">{{ l.n }}</span></button>{% endfor %}
+  </div>
+  {% if liste.length %}
+  <div class="grille" id="liste-mots">
+    {% for m in liste %}
+    <a class="carte carte-mot" href="{{ m.url }}" data-langue="{{ m.data.langue or 'autre' }}">
+      <span class="etiquette" style="color:var(--accent)">{{ m.data.langue }}</span>
+      <span class="cm-mot">{{ m.data.mot }}</span>
+      <span class="cm-chaine">{{ m.data.parcours | chaine | safe }}</span>
+      <p>{{ (m.data.accroche or m.data.resume) | mdl | safe }}</p>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}<p class="vide">Aucune fiche pour l'instant.</p>{% endif %}
+</div>

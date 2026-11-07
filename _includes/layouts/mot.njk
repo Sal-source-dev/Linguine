@@ -1,0 +1,57 @@
+---
+layout: layouts/base.njk
+---
+{%- set v = collections.mots | voisins(page.url) -%}
+<div class="conteneur">
+  <p class="fil"><a href="/mots/">Mots voyageurs</a> / {{ langue }}</p>
+  <div class="fiche-tete">
+    <div class="principal">
+      <h1>{{ mot }}</h1>
+      <div class="chapo">{{ resume | md | safe }}</div>
+      {% if modele %}<p><span class="badge badge-modele">Modèle à remplacer</span></p>{% endif %}
+    </div>
+    {% if langue or etymon or entree %}
+    <dl class="identite carte">
+      {% if langue %}<div><dt>Langue source</dt><dd>{{ langue }}</dd></div>{% endif %}
+      {% if etymon %}<div><dt>Étymon</dt><dd>{{ etymon | mdl | safe }}{% if sens_etymon %}, «&nbsp;{{ sens_etymon | mdl | safe }}&nbsp;»{% endif %}</dd></div>{% endif %}
+      {% if entree %}<div><dt>Entrée en français</dt><dd>{{ entree | mdl | safe }}</dd></div>{% endif %}
+    </dl>
+    {% endif %}
+  </div>
+
+  {% if parcours and parcours.length %}
+  <section class="section" aria-labelledby="t-parcours" style="margin-top:56px">
+    <h2 id="t-parcours" style="margin:0 0 24px;font-weight:600;font-size:28px">Le parcours</h2>
+    <div class="grille">
+      {% for r in parcours %}
+      <div class="carte route{% if loop.index0 % 2 %} carte-accent{% endif %}">
+        {% if r.titre %}<h3>{{ r.titre | mdl | safe }}</h3>{% endif %}
+        <ol class="etapes">
+          {% for e in r.etapes %}<li><span class="langue">{{ e.langue }}</span><span class="forme">{{ e.forme | mdl | safe }}</span></li>{% endfor %}
+        </ol>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <div class="deux-colonnes" style="margin-top:56px">
+    <article class="principal prose">
+      {% if content | trim %}<h2>Glissements de sens</h2>{{ content | finitions | safe }}{% endif %}
+    </article>
+    <aside class="lateral">
+      {% if anecdote %}<div class="carte-inverse"><p class="etiquette" style="margin-bottom:8px">Le détail qui m'a plu</p><div class="prose">{{ anecdote | md | safe }}</div></div>{% endif %}
+      {% if cousins and cousins.length %}<div class="carte"><p class="etiquette" style="margin-bottom:12px">Cousins ailleurs</p><ul class="liste-simple">
+        {% for c in cousins %}<li><b>{{ c.langue }}</b> {{ c.formes | mdl | safe }}</li>{% endfor %}
+      </ul></div>{% endif %}
+      {% if sources and sources.length %}<div class="carte"><p class="etiquette" style="margin-bottom:12px">Sources</p><ul class="liste-simple">
+        {% for s in sources %}<li>{{ s | mdl | safe }}</li>{% endfor %}
+      </ul></div>{% endif %}
+    </aside>
+  </div>
+
+  <nav class="voisins" aria-label="Fiches voisines">
+    {% if v.prec %}<a href="{{ v.prec.url }}">← {{ v.prec.data.mot }}</a>{% else %}<a href="/mots/">← Toutes les fiches</a>{% endif %}
+    {% if v.suiv %}<a href="{{ v.suiv.url }}">{{ v.suiv.data.mot }} →</a>{% else %}<a href="/mots/">Toutes les fiches →</a>{% endif %}
+  </nav>
+</div>

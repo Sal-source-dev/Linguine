@@ -1,0 +1,11 @@
+---
+layout: layouts/base.njk
+---
+<div class="conteneur article-page">
+  <p class="fil"><a href="/articles/">Articles</a> / {{ date | dateFr }}{% if theme %} · {{ theme }}{% endif %}</p>
+  {% if modele %}<p><span class="badge badge-modele">Modèle à remplacer</span></p>{% endif %}
+  <h1 class="page-titre">{{ titre | mdl | safe }}</h1>
+  <div class="chapo">{{ chapeau | md | safe }}</div>
+  <div class="prose">{{ content | finitions | safe }}</div>
+  <nav class="voisins" aria-label="Retour"><a href="/articles/">← Tous les articles</a></nav>
+</div>

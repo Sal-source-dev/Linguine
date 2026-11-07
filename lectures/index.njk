@@ -1,0 +1,49 @@
+---
+layout: layouts/base.njk
+permalink: /lectures/
+section: lectures
+titre_page: Carnet de lectures
+---
+{%- set notes = collections.lectures | parDate -%}
+{%- set themes = notes | themesDe -%}
+<div class="conteneur">
+  <h1 class="page-titre">Carnet de lectures</h1>
+  <div class="chapo">{{ reglages.intro_lectures | md | safe }}</div>
+  <div class="deux-colonnes" style="margin-top:48px">
+    <div class="principal lectures">
+      {% for l in notes %}{% set d = l.data %}
+      <article class="carte note">
+        <div class="note-meta">
+          {% if d.statut %}<span class="badge{% if d.statut == 'en cours' %} badge-cours{% endif %}">{{ d.statut }}</span>{% endif %}
+          {% if d.modele %}<span class="badge badge-modele">Modèle à remplacer</span>{% endif %}
+          <span class="mono" style="font-size:14px;color:var(--muted)">{{ d.date | dateFr }}</span>
+        </div>
+        <h2>{{ d.titre | mdl | safe }}</h2>
+        <p class="auteur">{{ d.auteur }}{% if d.annee %}, {{ d.annee }}{% endif %}</p>
+        {% if d.retiens %}<div class="bloc"><h3 class="etiquette">Ce que je retiens</h3>{{ d.retiens | md | safe }}</div>{% endif %}
+        {% if d.passage %}<div class="bloc"><h3 class="etiquette">Un passage à garder</h3><blockquote>{{ d.passage | mdl | safe }}{% if d.page_passage %} <span class="mono" style="font-style:normal;font-size:14px;color:var(--muted)">(p. {{ d.page_passage | mdl | safe }})</span>{% endif %}</blockquote></div>{% endif %}
+        {% if d.questions %}<div class="bloc"><h3 class="etiquette">Questions ouvertes</h3>{{ d.questions | md | safe }}</div>{% endif %}
+        {% if d.mots and d.mots.length %}<div class="bloc"><h3 class="etiquette" style="margin-bottom:10px">Mots à suivre</h3><div class="puces">
+          {% for w in d.mots %}{% set f = collections.mots | trouverMot(w) %}{% if f %}<a class="puce" href="{{ f.url }}">{{ w }}</a>{% else %}<span class="puce">{{ w }}</span>{% endif %}{% endfor %}
+        </div></div>{% endif %}
+      </article>
+      {% else %}
+      <p class="vide">Aucune note pour l'instant.</p>
+      {% endfor %}
+    </div>
+    <aside class="lateral">
+      {% if reglages.pile and reglages.pile.length %}
+      <div class="carte-inverse"><p class="etiquette" style="margin-bottom:14px">Sur ma pile</p>
+        <ul class="liste-simple pile" style="gap:14px">
+          {% for p in reglages.pile %}<li><b>{{ p.titre | mdl | safe }}</b>{% if p.auteur %}<br>{{ p.auteur }}{% endif %}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if themes.length %}
+      <div class="carte"><p class="etiquette" style="margin-bottom:12px">Thèmes</p>
+        <div class="puces">{% for t in themes %}<span class="puce">{{ t }}</span>{% endfor %}</div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>

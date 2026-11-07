@@ -1,0 +1,6 @@
+<a class="carte carte-article" href="{{ a.url }}">
+  <p class="etiquette">{{ a.data.date | dateFr }}{% if a.data.theme %} · {{ a.data.theme }}{% endif %}</p>
+  <h3>{{ a.data.titre | mdl | safe }}</h3>
+  <p>{{ a.data.chapeau | mdl | safe }}</p>
+  {% if a.data.modele %}<p><span class="badge badge-modele">Modèle à remplacer</span></p>{% endif %}
+</a>

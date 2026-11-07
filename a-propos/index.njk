@@ -1,0 +1,19 @@
+---
+layout: layouts/base.njk
+permalink: /a-propos/
+section: apropos
+titre_page: À propos
+---
+<div class="conteneur">
+  <div class="deux-colonnes">
+    <div class="principal">
+      <h1 class="page-titre">À propos</h1>
+      <div class="prose" style="margin-top:28px;font-size:20px">{{ (reglages.apropos or reglages.presentation) | md | safe }}</div>
+    </div>
+    {% if reglages.nom_explication %}
+    <aside class="lateral" style="align-self:flex-start;margin-top:12px">
+      <div class="carte-inverse"><p class="etiquette" style="margin-bottom:8px">Le nom</p><div class="prose">{{ reglages.nom_explication | md | safe }}</div></div>
+    </aside>
+    {% endif %}
+  </div>
+</div>

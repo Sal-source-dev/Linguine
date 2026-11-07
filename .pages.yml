@@ -1,0 +1,236 @@
+# Configuration de Pages CMS : les formulaires de linguine.
+media:
+  input: assets/images
+  output: /assets/images
+
+content:
+  - name: mots
+    label: Mots voyageurs
+    type: collection
+    path: contenus/mots
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: [mots.11tydata.js]
+    view:
+      fields: [mot, langue, date]
+      primary: mot
+    fields:
+      - name: mot
+        label: Mot
+        type: string
+      - name: langue
+        label: Langue source
+        type: string
+        description: "En minuscules, toujours écrite de la même façon (ex. : arabe), pour que le filtre par langue fonctionne."
+      - name: etymon
+        label: Étymon
+        type: string
+        description: "La forme d'origine. *Astérisques* = italique."
+      - name: sens_etymon
+        label: Sens de l'étymon
+        type: string
+      - name: entree
+        label: Entrée en français
+        type: string
+        description: "Ex. : XVIIᵉ siècle"
+      - name: date
+        label: Date de la fiche
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: accroche
+        label: Accroche
+        type: string
+        description: "Une phrase courte, affichée dans les listes."
+      - name: resume
+        label: Résumé
+        type: text
+        description: "Deux ou trois phrases, sous le titre de la fiche."
+      - name: parcours
+        label: Parcours
+        type: object
+        list: true
+        description: "Une route par chemin suivi. Ajoute une seconde route si le mot est arrivé par deux voies."
+        fields:
+          - name: titre
+            label: Titre de la route
+            type: string
+          - name: etapes
+            label: Étapes
+            type: object
+            list: true
+            fields:
+              - name: langue
+                label: Langue
+                type: string
+              - name: forme
+                label: Forme
+                type: string
+      - name: body
+        label: Glissements de sens
+        type: rich-text
+        options:
+          format: markdown
+      - name: anecdote
+        label: Le détail qui m'a plu
+        type: text
+      - name: cousins
+        label: Cousins ailleurs
+        type: object
+        list: true
+        fields:
+          - name: langue
+            label: Langue
+            type: string
+          - name: formes
+            label: Formes
+            type: string
+      - name: sources
+        label: Sources
+        type: string
+        list: true
+      - name: modele
+        label: Afficher le badge « Modèle à remplacer »
+        type: boolean
+
+  - name: lectures
+    label: Carnet de lectures
+    type: collection
+    path: contenus/lectures
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: [lectures.11tydata.json]
+    view:
+      fields: [titre, auteur, statut, date]
+      primary: titre
+    fields:
+      - name: titre
+        label: Titre du livre
+        type: string
+      - name: auteur
+        label: Autrice ou auteur
+        type: string
+      - name: annee
+        label: Année de parution
+        type: string
+      - name: date
+        label: Date de la note
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: statut
+        label: Statut
+        type: select
+        options:
+          values: [en cours, lu]
+      - name: retiens
+        label: Ce que je retiens
+        type: text
+      - name: passage
+        label: Un passage à garder
+        type: text
+      - name: page_passage
+        label: Page du passage
+        type: string
+      - name: questions
+        label: Questions ouvertes
+        type: text
+      - name: mots
+        label: Mots à suivre
+        type: string
+        list: true
+        description: "Si une fiche existe pour ce mot, il devient un lien vers elle."
+      - name: themes
+        label: Thèmes
+        type: string
+        list: true
+      - name: modele
+        label: Afficher le badge « Modèle à remplacer »
+        type: boolean
+
+  - name: articles
+    label: Articles
+    type: collection
+    path: contenus/articles
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: [articles.11tydata.js]
+    view:
+      fields: [titre, theme, date]
+      primary: titre
+    fields:
+      - name: titre
+        label: Titre
+        type: string
+      - name: date
+        label: Date
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: theme
+        label: Thématique
+        type: string
+      - name: chapeau
+        label: Chapeau
+        type: text
+        description: "Deux lignes pour donner envie de lire la suite."
+      - name: body
+        label: Texte
+        type: rich-text
+        options:
+          format: markdown
+      - name: modele
+        label: Afficher le badge « Modèle à remplacer »
+        type: boolean
+
+  - name: reglages
+    label: Réglages du site
+    type: file
+    path: _data/reglages.json
+    format: json
+    fields:
+      - name: nom_site
+        label: Nom du site
+        type: string
+      - name: surtitre
+        label: Surtitre de l'accueil
+        type: string
+      - name: accroche
+        label: Grand titre de l'accueil
+        type: string
+      - name: presentation
+        label: Présentation (accueil)
+        type: text
+      - name: mot_du_moment
+        label: Mot du moment
+        type: string
+        description: "Écris le mot exactement comme dans sa fiche (ex. : café)."
+      - name: intro_mots
+        label: Introduction des Mots voyageurs
+        type: text
+      - name: intro_lectures
+        label: Introduction du Carnet de lectures
+        type: text
+      - name: intro_articles
+        label: Introduction des Articles
+        type: text
+      - name: apropos
+        label: Texte de la page À propos
+        type: text
+      - name: nom_explication
+        label: Encadré « Le nom »
+        type: text
+      - name: pile
+        label: Sur ma pile
+        type: object
+        list: true
+        fields:
+          - name: titre
+            label: Titre
+            type: string
+          - name: auteur
+            label: Autrice ou auteur
+            type: string
+      - name: pied_de_page
+        label: Pied de page
+        type: string

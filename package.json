@@ -1,0 +1,13 @@
+{
+  "name": "linguine",
+  "private": true,
+  "type": "module",
+  "description": "linguine — carnet personnel de sciences du langage",
+  "scripts": {
+    "build": "eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.6",
+    "markdown-it": "14.1.0"
+  }
+}
