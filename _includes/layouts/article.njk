@@ -7,5 +7,6 @@ layout: layouts/base.njk
   <h1 class="page-titre">{{ titre | mdl | safe }}</h1>
   <div class="chapo">{{ chapeau | md | safe }}</div>
   <div class="prose">{{ content | finitions | safe }}</div>
+  {% if langues and langues.length %}<div class="puces" style="margin-top:32px" aria-label="Langues concernées">{% for l in langues %}{% set fl = collections.langues | trouverLangue(l) %}{% if fl %}<a class="puce" href="{{ fl.url }}">{{ l }}</a>{% else %}<span class="puce">{{ l }}</span>{% endif %}{% endfor %}</div>{% endif %}
   <nav class="voisins" aria-label="Retour"><a href="/articles/">← Tous les articles</a></nav>
 </div>

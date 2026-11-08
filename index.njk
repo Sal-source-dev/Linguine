@@ -22,12 +22,24 @@ permalink: /
   {% endif %}
 </section>
 
+<section class="section conteneur" aria-labelledby="t-atlas">
+  <a class="carte porte-atlas" href="/langues/">
+    <div>
+      <p class="etiquette">{{ collections.langues.length | pluriel("langue", "langues") }} · arbre, carte, frise</p>
+      <h2 id="t-atlas">Atlas des langues</h2>
+      <p>Toutes les langues du carnet, reliées par leur parenté, leur géographie et leur histoire. Chacune a sa fiche, ses notes et ses mots.</p>
+      <span class="lien">Explorer le ciel →</span>
+    </div>
+    {{ collections.langues | miniCiel | safe }}
+  </a>
+</section>
+
 <section class="section conteneur" aria-labelledby="t-tiroirs">
-  <h2 id="t-tiroirs" style="margin-bottom:20px">Trois tiroirs</h2>
+  <h2 id="t-tiroirs" style="margin-bottom:20px">Trois carnets</h2>
   <div class="grille tiroirs">
+    <a class="carte" href="/mots/"><span class="nom">Mots voyageurs</span><span class="desc">L'histoire des mots empruntés : d'où ils viennent, par où ils sont passés, ce qu'ils ont changé en route.</span><span class="compte">{{ collections.mots.length | pluriel("fiche", "fiches") }}</span></a>
     <a class="carte" href="/lectures/"><span class="nom">Carnet de lectures</span><span class="desc">Des notes prises sur le vif : ce que je retiens, ce qui me résiste, les mots que j'ai envie de suivre.</span><span class="compte">{{ collections.lectures.length | pluriel("note", "notes") }}</span></a>
     <a class="carte" href="/articles/"><span class="nom">Articles</span><span class="desc">Des textes plus construits quand une thématique m'accroche : contact des langues, variation, phonétique…</span><span class="compte">{{ collections.articles.length | pluriel("article", "articles") }}</span></a>
-    <a class="carte carte-accent" href="/mots/"><span class="nom">Mots voyageurs</span><span class="desc">L'histoire des mots empruntés : d'où ils viennent, par où ils sont passés, ce qu'ils ont changé en route.</span><span class="compte">{{ collections.mots.length | pluriel("fiche", "fiches") }}</span></a>
   </div>
 </section>
 
@@ -36,7 +48,7 @@ permalink: /
   {% if mots.length %}
   <ul class="liste-mots">
     {% for m in mots | premiers(5) %}
-    <li><a href="{{ m.url }}"><span class="lm-mot">{{ m.data.mot }}</span><span class="lm-langue">{{ m.data.langue }}</span><span class="lm-resume">{{ (m.data.accroche or m.data.resume) | mdl | safe }}</span></a></li>
+    <li><a href="{{ m.url }}"><span class="lm-mot">{{ m.data.mot }}</span><span class="lm-langue">{{ m.data.langue }} → {{ m.data | arrivee }}</span><span class="lm-resume">{{ (m.data.accroche or m.data.resume) | mdl | safe }}</span></a></li>
     {% endfor %}
   </ul>
   {% else %}<p class="vide">Aucune fiche pour l'instant.</p>{% endif %}

@@ -2,8 +2,11 @@
 layout: layouts/base.njk
 ---
 {%- set v = collections.mots | voisins(page.url) -%}
+{%- set arr = { langue_arrivee: langue_arrivee } | arrivee -%}
+{%- set lDep = collections.langues | trouverLangue(langue) -%}
+{%- set lArr = collections.langues | trouverLangue(arr) -%}
 <div class="conteneur">
-  <p class="fil"><a href="/mots/">Mots voyageurs</a> / {{ langue }}</p>
+  <p class="fil"><a href="/mots/">Mots voyageurs</a> / {{ langue }} → {{ arr }}</p>
   <div class="fiche-tete">
     <div class="principal">
       <h1>{{ mot }}</h1>
@@ -12,16 +15,17 @@ layout: layouts/base.njk
     </div>
     {% if langue or etymon or entree %}
     <dl class="identite carte">
-      {% if langue %}<div><dt>Langue source</dt><dd>{{ langue }}</dd></div>{% endif %}
+      {% if langue %}<div><dt>Langue de départ</dt><dd>{% if lDep %}<a class="lien-langue" href="{{ lDep.url }}">{{ langue }}</a>{% else %}{{ langue }}{% endif %}</dd></div>{% endif %}
+      <div><dt>Langue d'arrivée</dt><dd>{% if lArr %}<a class="lien-langue" href="{{ lArr.url }}">{{ arr }}</a>{% else %}{{ arr }}{% endif %}</dd></div>
       {% if etymon %}<div><dt>Étymon</dt><dd>{{ etymon | mdl | safe }}{% if sens_etymon %}, «&nbsp;{{ sens_etymon | mdl | safe }}&nbsp;»{% endif %}</dd></div>{% endif %}
-      {% if entree %}<div><dt>Entrée en français</dt><dd>{{ entree | mdl | safe }}</dd></div>{% endif %}
+      {% if entree %}<div><dt>Entrée {{ "en " + arr }}</dt><dd>{{ entree | mdl | safe }}</dd></div>{% endif %}
     </dl>
     {% endif %}
   </div>
 
   {% if parcours and parcours.length %}
   <section class="section" aria-labelledby="t-parcours" style="margin-top:56px">
-    <h2 id="t-parcours" style="margin:0 0 24px;font-weight:600;font-size:28px">Le parcours</h2>
+    <h2 id="t-parcours" style="margin:0 0 24px;font-weight:500;font-size:34px">Le parcours</h2>
     <div class="grille">
       {% for r in parcours %}
       <div class="carte route{% if loop.index0 % 2 %} carte-accent{% endif %}">

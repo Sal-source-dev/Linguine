@@ -1,15 +1,16 @@
 {%- set r = reglages -%}
-{%- set titre = titre_page or mot or titre -%}
+{%- set titre = titre_page or mot or nom or titre -%}
 <!doctype html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0D1A">
 <title>{% if titre %}{{ titre | sansEtoiles }} · {% endif %}{{ r.nom_site }}</title>
 <meta name="description" content="{{ r.pied_de_page }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&amp;display=swap">
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
@@ -17,9 +18,10 @@
   <div class="conteneur">
     <a class="logo" href="/">{{ r.nom_site }}</a>
     <nav class="nav" aria-label="Navigation principale">
+      <a href="/langues/"{% if section == "langues" %} aria-current="page"{% endif %}>Atlas</a>
+      <a href="/mots/"{% if section == "mots" %} aria-current="page"{% endif %}>Mots voyageurs</a>
       <a href="/lectures/"{% if section == "lectures" %} aria-current="page"{% endif %}>Lectures</a>
       <a href="/articles/"{% if section == "articles" %} aria-current="page"{% endif %}>Articles</a>
-      <a href="/mots/"{% if section == "mots" %} aria-current="page"{% endif %}>Mots voyageurs</a>
       <a href="/a-propos/"{% if section == "apropos" %} aria-current="page"{% endif %}>À propos</a>
     </nav>
   </div>
@@ -37,5 +39,10 @@
   </div>
 </footer>
 {% if section == "mots" and not mot %}<script src="/assets/filtres.js"></script>{% endif %}
+{% if atlas %}
+<script src="/assets/vendor/d3.min.js"></script>
+<script src="/assets/vendor/topojson-client.min.js"></script>
+<script src="/assets/atlas.js"></script>
+{% endif %}
 </body>
 </html>

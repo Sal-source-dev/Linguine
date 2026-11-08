@@ -1,0 +1,53 @@
+---
+layout: layouts/base.njk
+permalink: /langues/
+section: langues
+atlas: true
+titre_page: Atlas des langues
+---
+{%- set index = collections.langues | indexAtlas -%}
+<div class="conteneur">
+  <h1 class="page-titre">Atlas des <em>langues</em></h1>
+  <div class="chapo">{{ (reglages.intro_langues or "Les langues de ce carnet, reliées par leur parenté, leur géographie et leur histoire. Touche une étoile pour lire sa fiche.") | md | safe }}</div>
+
+  <div class="vues" role="group" aria-label="Choisir la lecture de l'atlas">
+    <button type="button" data-vue="arbre" aria-pressed="true">Arbre des familles</button>
+    <button type="button" data-vue="carte" aria-pressed="false">Carte</button>
+    <button type="button" data-vue="frise" aria-pressed="false">Frise</button>
+    <button type="button" data-vue="arbre-frise" aria-pressed="false">Arbre + frise</button>
+  </div>
+
+  <figure class="ciel" style="margin:0">
+    <div class="ciel-defile" id="ciel" aria-live="polite">
+      <p class="chargement">Le ciel se dessine…</p>
+    </div>
+  </figure>
+  <p class="ciel-aide" id="ciel-aide"></p>
+  <ul class="legende" id="legende" aria-label="Couleurs des familles et des branches">
+    {% for l in collections.langues | legende %}<li><span class="pastille" style="background:{{ l.couleur }};color:{{ l.couleur }}"></span>{{ l.nom }}</li>{% endfor %}
+  </ul>
+
+  <div class="carte detail" id="detail" hidden>
+    <div>
+      <p class="etiquette" id="detail-type"></p>
+      <h2 id="detail-nom"></h2>
+      <p id="detail-resume"></p>
+      <p class="meta" id="detail-meta"></p>
+    </div>
+    <a class="ouvrir" id="detail-lien" href="/langues/">Ouvrir la fiche →</a>
+  </div>
+
+  <section class="section" aria-labelledby="t-index">
+    <h2 id="t-index" style="margin:0 0 20px">Toutes les langues</h2>
+    {% if index.length %}
+    <ul class="index-atlas">
+      {% for n in index %}
+        {% if n.niveau == 0 %}<li class="famille">{{ n.nom }}</li>{% endif %}
+        <li style="padding-left:{{ n.niveau * 14 }}px"><a class="lien-langue" style="--c:{{ n.couleur }}" href="{{ n.url }}">{{ n.nom }}</a>{% if n.type != "langue" %} <span class="mono" style="font-size:12px;color:var(--pale)">{{ n.type }}</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="vide">Aucune langue pour l'instant : ajoute-en une dans Pages CMS, section « Langues ».</p>{% endif %}
+  </section>
+</div>
+<script type="application/json" id="donnees-atlas">{{ collections.langues | atlasJSON(collections.mots) | safe }}</script>
+<link id="terres" rel="prefetch" href="/assets/vendor/terres-110m.json" as="fetch" crossorigin>

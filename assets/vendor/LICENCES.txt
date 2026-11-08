@@ -1,0 +1,4 @@
+Bibliothèques incluses dans ce dossier
+- d3 7.9.0 — licence ISC — https://d3js.org
+- topojson-client 3.1.0 — licence ISC — https://github.com/topojson/topojson-client
+- terres-110m.json : world-atlas 2.0.2 (licence ISC), d'après Natural Earth (domaine public) — https://github.com/topojson/world-atlas

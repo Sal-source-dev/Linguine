@@ -23,6 +23,9 @@ titre_page: Carnet de lectures
         {% if d.retiens %}<div class="bloc"><h3 class="etiquette">Ce que je retiens</h3>{{ d.retiens | md | safe }}</div>{% endif %}
         {% if d.passage %}<div class="bloc"><h3 class="etiquette">Un passage à garder</h3><blockquote>{{ d.passage | mdl | safe }}{% if d.page_passage %} <span class="mono" style="font-style:normal;font-size:14px;color:var(--muted)">(p. {{ d.page_passage | mdl | safe }})</span>{% endif %}</blockquote></div>{% endif %}
         {% if d.questions %}<div class="bloc"><h3 class="etiquette">Questions ouvertes</h3>{{ d.questions | md | safe }}</div>{% endif %}
+        {% if d.langues and d.langues.length %}<div class="bloc"><h3 class="etiquette" style="margin-bottom:10px">Langues</h3><div class="puces">
+          {% for l in d.langues %}{% set fl = collections.langues | trouverLangue(l) %}{% if fl %}<a class="puce" href="{{ fl.url }}">{{ l }}</a>{% else %}<span class="puce">{{ l }}</span>{% endif %}{% endfor %}
+        </div></div>{% endif %}
         {% if d.mots and d.mots.length %}<div class="bloc"><h3 class="etiquette" style="margin-bottom:10px">Mots à suivre</h3><div class="puces">
           {% for w in d.mots %}{% set f = collections.mots | trouverMot(w) %}{% if f %}<a class="puce" href="{{ f.url }}">{{ w }}</a>{% else %}<span class="puce">{{ w }}</span>{% endif %}{% endfor %}
         </div></div>{% endif %}

@@ -4,6 +4,78 @@ media:
   output: /assets/images
 
 content:
+  - name: langues
+    label: Langues
+    type: collection
+    path: contenus/langues
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: [langues.11tydata.js]
+    view:
+      fields: [nom, type, parent, statut]
+      primary: nom
+    fields:
+      - name: nom
+        label: Nom
+        type: string
+        description: "En minuscules (ex. : latin, vieux slave). C'est ce nom qu'on choisit ensuite dans les autres formulaires."
+      - name: type
+        label: Type
+        type: select
+        options:
+          values: [langue, branche, famille]
+      - name: parent
+        label: Langue ou branche mère
+        description: "Ce qui place la langue dans l'arbre (ex. : le latin pour le français). Vide pour une grande famille."
+        type: reference
+        options:
+          collection: langues
+          value: "{primary}"
+          label: "{primary}"
+          search: nom
+      - name: statut
+        label: Statut
+        type: select
+        options:
+          values: [vivante, morte, langue savante, reconstruite]
+      - name: ecriture
+        label: Écriture
+        type: string
+      - name: debut
+        label: Début (année)
+        type: number
+        description: "Première attestation ou apparition. Négatif = avant J.-C. (ex. : -600)."
+      - name: fin
+        label: Fin (année)
+        type: number
+        description: "Vide si la langue est toujours parlée. Pour une langue savante : la fin de son usage comme langue maternelle."
+      - name: dates_approximatives
+        label: Dates approximatives
+        type: boolean
+      - name: region
+        label: Où on la parle (ou parlait)
+        type: string
+      - name: latitude
+        label: Latitude
+        type: number
+        description: "Pour la carte. Dans Plans, touche longuement un lieu : les coordonnées s'affichent (ex. : 41.9)."
+      - name: longitude
+        label: Longitude
+        type: number
+        description: "Ex. : 12.5 pour Rome. Négatif = à l'ouest de Greenwich."
+      - name: locuteurs
+        label: Locuteurs
+        type: string
+      - name: resume
+        label: Résumé
+        type: text
+        description: "Deux ou trois phrases, affichées sur l'atlas et en haut de la page."
+      - name: body
+        label: Mes notes
+        type: rich-text
+        options:
+          format: markdown
+
   - name: mots
     label: Mots voyageurs
     type: collection
@@ -12,16 +84,30 @@ content:
     filename: "{primary}.md"
     exclude: [mots.11tydata.js]
     view:
-      fields: [mot, langue, date]
+      fields: [mot, langue, langue_arrivee, date]
       primary: mot
     fields:
       - name: mot
         label: Mot
         type: string
       - name: langue
-        label: Langue source
-        type: string
-        description: "En minuscules, toujours écrite de la même façon (ex. : arabe), pour que le filtre par langue fonctionne."
+        label: Langue de départ
+        description: "La langue d'où vient le mot. Elle doit d'abord exister dans « Langues »."
+        type: reference
+        options:
+          collection: langues
+          value: "{primary}"
+          label: "{primary}"
+          search: nom
+      - name: langue_arrivee
+        label: Langue d'arrivée
+        description: "La langue qui a emprunté le mot (français par défaut)."
+        type: reference
+        options:
+          collection: langues
+          value: "{primary}"
+          label: "{primary}"
+          search: nom
       - name: etymon
         label: Étymon
         type: string
@@ -30,7 +116,7 @@ content:
         label: Sens de l'étymon
         type: string
       - name: entree
-        label: Entrée en français
+        label: Date d'entrée dans la langue d'arrivée
         type: string
         description: "Ex. : XVIIᵉ siècle"
       - name: date
@@ -140,6 +226,16 @@ content:
         type: string
         list: true
         description: "Si une fiche existe pour ce mot, il devient un lien vers elle."
+      - name: langues
+        label: Langues concernées
+        description: "La note apparaîtra sur la page de ces langues."
+        type: reference
+        options:
+          collection: langues
+          value: "{primary}"
+          label: "{primary}"
+          search: nom
+          multiple: true
       - name: themes
         label: Thèmes
         type: string
@@ -170,6 +266,16 @@ content:
       - name: theme
         label: Thématique
         type: string
+      - name: langues
+        label: Langues concernées
+        description: "L'article apparaîtra sur la page de ces langues."
+        type: reference
+        options:
+          collection: langues
+          value: "{primary}"
+          label: "{primary}"
+          search: nom
+          multiple: true
       - name: chapeau
         label: Chapeau
         type: text
@@ -205,6 +311,9 @@ content:
         label: Mot du moment
         type: string
         description: "Écris le mot exactement comme dans sa fiche (ex. : café)."
+      - name: intro_langues
+        label: Introduction de l'Atlas des langues
+        type: text
       - name: intro_mots
         label: Introduction des Mots voyageurs
         type: text

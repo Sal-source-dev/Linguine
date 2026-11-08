@@ -1,0 +1,92 @@
+---
+layout: layouts/base.njk
+---
+{%- set info = collections.langues | infosLangue(nom) -%}
+{%- set depuis = collections.mots | motsDepuis(nom) -%}
+{%- set vers = collections.mots | motsVers(nom) -%}
+{%- set passage = collections.mots | motsPassantPar(nom) -%}
+{%- set lect = collections.lectures | taguesAvec(nom) -%}
+{%- set arts = collections.articles | taguesAvec(nom) -%}
+<div class="conteneur">
+  <p class="lignee">
+    <a href="/langues/">Atlas</a>
+    {% if info %}{% for a in info.ancetres %}<span class="sep" aria-hidden="true">›</span><a class="lien-langue" style="--c:{{ a.couleur }}" href="{{ a.url }}">{{ a.nom }}</a>{% endfor %}{% endif %}
+    <span class="sep" aria-hidden="true">›</span><span>{{ nom }}</span>
+  </p>
+  <div class="fiche-tete">
+    <div class="principal">
+      <p class="etiquette" style="margin-bottom:12px">{% if type == "famille" %}Famille de langues{% elif type == "branche" %}Branche{% else %}Langue{% endif %}{% if statut %} · {{ statut }}{% endif %}</p>
+      <h1 style="{% if info %}text-shadow:0 0 40px {{ info.couleur }}55{% endif %}">{{ nom }}</h1>
+      <div class="chapo">{{ resume | md | safe }}</div>
+    </div>
+    <dl class="identite carte">
+      {% set p = { debut: debut, fin: fin, statut: statut, dates_approximatives: dates_approximatives } | periode %}
+      {% if p %}<div><dt>Période</dt><dd>{{ p }}</dd></div>{% endif %}
+      {% if ecriture %}<div><dt>Écriture</dt><dd>{{ ecriture }}</dd></div>{% endif %}
+      {% if region %}<div><dt>{% if statut == "vivante" %}Où on la parle{% elif type == "langue" %}Où on la parlait{% else %}Foyer{% endif %}</dt><dd>{{ region }}</dd></div>{% endif %}
+      {% if locuteurs %}<div><dt>Locuteurs</dt><dd>{{ locuteurs }}</dd></div>{% endif %}
+      {% if info and info.enfants.length %}<div><dt>Descendance</dt><dd>{{ info.enfants.length | pluriel("langue ou branche", "langues ou branches") }}</dd></div>{% endif %}
+    </dl>
+  </div>
+
+  <div class="deux-colonnes" style="margin-top:56px">
+    <div class="principal">
+      {% if content | trim %}
+      <section class="prose" aria-labelledby="t-notes">
+        <h2 id="t-notes">Mes notes</h2>
+        {{ content | finitions | safe }}
+      </section>
+      {% endif %}
+
+      {% if depuis.length or vers.length or passage.length %}
+      <section class="section" style="margin-top:{% if content | trim %}64px{% else %}0{% endif %}" aria-labelledby="t-mots">
+        <h2 id="t-mots" style="margin:0 0 20px;font-weight:500;font-size:34px">Mots voyageurs</h2>
+        <div style="display:flex;flex-direction:column;gap:28px">
+          {% if depuis.length %}<div><p class="etiquette" style="margin-bottom:10px">Partis {{ nom | de }}</p><ul class="liste-liee">
+            {% for m in depuis | parMot %}<li><a href="{{ m.url }}"><span class="t">{{ m.data.mot }}</span><span class="s">vers {{ m.data | arrivee | le }}</span></a></li>{% endfor %}
+          </ul></div>{% endif %}
+          {% if vers.length %}<div><p class="etiquette" style="margin-bottom:10px">Arrivés en {{ nom }}</p><ul class="liste-liee">
+            {% for m in vers | parMot %}<li><a href="{{ m.url }}"><span class="t">{{ m.data.mot }}</span><span class="s">venu {{ m.data.langue | de }}</span></a></li>{% endfor %}
+          </ul></div>{% endif %}
+          {% if passage.length %}<div><p class="etiquette" style="margin-bottom:10px">De passage</p><ul class="liste-liee">
+            {% for m in passage | parMot %}<li><a href="{{ m.url }}"><span class="t">{{ m.data.mot }}</span><span class="s">{{ m.data.langue }} → {{ m.data | arrivee }}</span></a></li>{% endfor %}
+          </ul></div>{% endif %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if lect.length or arts.length %}
+      <section class="section" style="margin-top:64px" aria-labelledby="t-lire">
+        <h2 id="t-lire" style="margin:0 0 20px;font-weight:500;font-size:34px">Lectures et articles</h2>
+        <ul class="liste-liee">
+          {% for a in arts | parDate %}<li><a href="{{ a.url }}"><span class="t">{{ a.data.titre | mdl | safe }}</span><span class="s">article · {{ a.data.date | dateFr }}</span></a></li>{% endfor %}
+          {% for l in lect | parDate %}<li><a href="/lectures/"><span class="t">{{ l.data.titre | mdl | safe }}</span><span class="s">lecture · {{ l.data.auteur }}</span></a></li>{% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if not (content | trim) and not depuis.length and not vers.length and not passage.length and not lect.length and not arts.length %}
+      <p class="vide">Rien encore sur cette langue. Ajoute des notes dans sa fiche, ou relie-lui un mot, une lecture ou un article dans Pages CMS.</p>
+      {% endif %}
+    </div>
+
+    {% if info %}
+    <aside class="lateral">
+      <div class="carte parente">
+        <p class="etiquette">Parenté</p>
+        {% if info.ancetres.length %}{% set mere = info.ancetres | last %}
+        <div><p class="etiquette" style="color:var(--pale);font-size:11.5px">Langue mère</p><div class="puces"><a class="puce lien-langue" style="--c:{{ mere.couleur }}" href="{{ mere.url }}">{{ mere.nom }}</a></div></div>
+        {% endif %}
+        {% if info.enfants.length %}
+        <div><p class="etiquette" style="color:var(--pale);font-size:11.5px">Langues filles</p><div class="puces">{% for e in info.enfants %}<a class="puce lien-langue" style="--c:{{ e.couleur }}" href="{{ e.url }}">{{ e.nom }}</a>{% endfor %}</div></div>
+        {% endif %}
+        {% if info.soeurs.length %}
+        <div><p class="etiquette" style="color:var(--pale);font-size:11.5px">Langues sœurs</p><div class="puces">{% for e in info.soeurs %}<a class="puce lien-langue" style="--c:{{ e.couleur }}" href="{{ e.url }}">{{ e.nom }}</a>{% endfor %}</div></div>
+        {% endif %}
+        {% if not info.ancetres.length and not info.enfants.length %}<p class="vide" style="margin:0">Pas encore reliée à d'autres langues.</p>{% endif %}
+      </div>
+      <a class="carte" href="/langues/" style="text-decoration:none;display:block"><span class="etiquette" style="color:var(--or)">Voir dans l'atlas →</span></a>
+    </aside>
+    {% endif %}
+  </div>
+</div>
